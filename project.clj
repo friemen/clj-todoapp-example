@@ -8,10 +8,15 @@
 
   :dependencies
   [[org.clojure/clojure "1.10.1"]
-
    [com.stuartsierra/component "0.4.0"]
+
+   ;; web related
    [http-kit "2.3.0"]
-   ]
+
+   ;; DB related
+   [com.h2database/h2 "1.4.199"]
+   [org.clojure/java.jdbc "0.7.10"]
+   [com.mchange/c3p0 "0.9.5.4"]]
 
   :profiles
   {:dev {:source-paths
