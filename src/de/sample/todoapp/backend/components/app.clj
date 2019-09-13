@@ -1,17 +1,18 @@
 (ns de.sample.todoapp.backend.components.app
   (:require
-   [com.stuartsierra.component :as c]))
+   [com.stuartsierra.component :as c]
+   [de.sample.todoapp.backend.handler :as handler]))
 
 
-(defrecord App []
+(defrecord App [handler]
   c/Lifecycle
   (start [component]
     (println ";; Starting App")
-    component)
+    (assoc component :handler handler/handler))
 
   (stop [component]
     (println ";; Stopping App")
-    component))
+    (assoc component :handler nil)))
 
 
 (defn new-app

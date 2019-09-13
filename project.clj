@@ -10,6 +10,7 @@
   [[org.clojure/clojure "1.10.1"]
 
    [com.stuartsierra/component "0.4.0"]
+   [http-kit "2.3.0"]
    ]
 
   :profiles
