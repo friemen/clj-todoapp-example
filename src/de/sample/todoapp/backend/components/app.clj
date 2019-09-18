@@ -8,7 +8,7 @@
   c/Lifecycle
   (start [component]
     (println ";; Starting App")
-    (assoc component :handler handler/handler))
+    (assoc component :handler (handler/new-handler)))
 
   (stop [component]
     (println ";; Stopping App")

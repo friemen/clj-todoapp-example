@@ -1,6 +1,7 @@
 (ns user
   (:require [clojure.tools.namespace.repl :refer [refresh]]
             [com.stuartsierra.component :as c]
+            [figwheel-sidecar.repl-api :refer :all]
             [de.sample.todoapp.backend.core :as core]))
 
 (defonce system

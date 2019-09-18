@@ -1,6 +1,8 @@
 /target
 /classes
 /checkouts
+resources/public/js/main.js
+resources/public/js/out
 profiles.clj
 pom.xml
 pom.xml.asc
@@ -10,3 +12,4 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
+/figwheel_server.log
