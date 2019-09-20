@@ -42,6 +42,14 @@
                 :label    ""
                 :done?    false}))))
 
+(rf/reg-event-db
+ :todo/delete
+ (fn [db [_ id]]
+   (if (js/window.confirm (str "Delete item " id "?"))
+     (update db :todos dissoc id)
+     db)))
+
+
 (defn textfield
   [{:keys [id path label]} value]
   (fn [_ value]
@@ -84,7 +92,11 @@
              [checkbox {:path [:todos id :done?]}
               done?]
              [textfield {:path [:todos id :label]}
-              label]])]
+              label]
+             [:span.delete
+              {:on-click (fn [e]
+                           (rf/dispatch [:todo/delete id]))}
+              "x"]])]
      [button {:id :add
               :label "+ Add item"
               :event [:todo/new]}]]))
