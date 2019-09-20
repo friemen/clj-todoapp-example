@@ -9,7 +9,8 @@
 
 (defn- index
   []
-  (hp/html5 [:head]
+  (hp/html5 [:head
+             [:link {:href "css/stylesheet.css" :rel "stylesheet" :type "text/css"}]]
             [:body
              [:div#app
               "Loading..."]

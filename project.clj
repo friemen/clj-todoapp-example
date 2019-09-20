@@ -44,6 +44,9 @@
          :repl-options
          {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}}}
 
+  :figwheel
+  {:css-dirs ["resources/public/css"]}
+
   :cljsbuild
   {:builds [{:id "dev"
              :source-paths ["src/"]
@@ -51,8 +54,8 @@
              :compiler {:main "de.sample.todoapp.frontend.core"
                         :asset-path "js/out"
                         :output-to "resources/public/js/main.js"
-                        :output-dir "resources/public/js/out" } } ]}
-
+                        :output-dir "resources/public/js/out"
+                        :source-map true} } ]}
 
   :repl-options
   {:init-ns user})
