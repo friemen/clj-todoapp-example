@@ -9,9 +9,11 @@
   :dependencies
   [[org.clojure/clojure "1.10.1"]
    [org.clojure/core.async "0.4.500"]
-   [org.clojure/clojurescript  "1.10.520"]
 
+   ;; Frontend
+   [org.clojure/clojurescript  "1.10.520"]
    [re-frame "0.10.9"]
+   [cljs-http "0.1.46"]
 
    ;; Backend general
    [com.stuartsierra/component "0.4.0"]
@@ -22,6 +24,9 @@
    [hiccup "1.0.5"]
    [compojure "1.6.1"]
    [ring/ring-core "1.7.1"]
+   [ring/ring-defaults "0.3.2"]
+   [ring/ring-anti-forgery "1.3.0"]
+   [ring-transit "0.1.6"]
 
 
    ;; DB related
@@ -38,7 +43,7 @@
          ["dev"]
          :dependencies
          [[org.clojure/tools.namespace "0.3.1"]
-          [cider/piggieback "0.4.0"]
+          [cider/piggieback "0.4.1"]
           [figwheel-sidecar "0.5.19"
            :exclusions [org.clojure/tools.nrepl]]]
          :repl-options

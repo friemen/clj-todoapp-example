@@ -4,7 +4,10 @@
    [taoensso.timbre :as log]
    [compojure.core :as cp :refer [GET POST]]
    [compojure.route :as route]
-   [hiccup.page :as hp]))
+   [hiccup.page :as hp]
+   [ring.util.response :as response]
+   [ring.middleware.transit :refer [wrap-transit-response wrap-transit-body]]
+   ))
 
 
 (defn- index
@@ -17,14 +20,29 @@
              [:script {:type "text/javascript"
                        :src "js/main.js"}]]))
 
+(defn- wrap-transit
+  [handler]
+  (-> handler
+      (wrap-transit-response)
+      (wrap-transit-body)))
+
+
+(defn- invoke-services!
+  [request]
+  (log/debug (:body request))
+  {:status 200
+   :body ["ok"]})
+
 
 (defn- ui-routes
   []
-  (cp/routes
-   (GET "/" []
-        (index))
-   (route/resources "")
-   (route/not-found "Page not found")))
+  (-> (cp/routes
+       (GET "/" []
+            (index))
+       (POST "/" request
+             (invoke-services! request))
+       (route/not-found "Page not found"))
+      (wrap-transit)))
 
 
 (defn- exception->str
@@ -54,5 +72,10 @@
 
 (defn new-handler
   []
-  (-> (ui-routes)
+  (-> (cp/routes
+       (route/resources "")
+       (cp/context "/ui" []
+                   (ui-routes))
+       (GET "/" []
+            (response/redirect "/ui")))
       (wrap-exception)))

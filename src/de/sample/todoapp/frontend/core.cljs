@@ -1,34 +1,79 @@
 (ns de.sample.todoapp.frontend.core
   (:require
    [reagent.core :as reagent]
-   [re-frame.core :as rf]))
+   [re-frame.core :as rf]
+
+   [cljs-http.client :as http]
+   [cljs-http.util :refer [transit-encode]]
+   [cljs.core.async :as async :refer [<!]])
+  (:require-macros
+   [cljs.core.async.macros :refer [go go-loop]]
+   [cljs.core :refer [exists?]]))
+
+
+
+;; ---------------------------------------------
+
+(def ^:private transit-mime-type
+  "application/transit+json;charset=utf-8")
+
+(defn backend
+  [requests handler-id]
+  (go
+    (js/console.log "Remote request" (pr-str requests))
+    (let [csrf-token (when (exists? js/__anti_forgery_token)
+                       js/__anti_forgery_token)
+          request
+          {:content-type transit-mime-type
+           :accept       transit-mime-type
+           :headers      {"X-CSRF-Token" csrf-token}
+           :body         (transit-encode requests :json {:encoding :json})}
+
+          {:keys [status body] :as response}
+          (<! (http/post "/ui" request))]
+
+      (rf/dispatch [handler-id
+                    (case status
+                      200 (mapv #(let [{:keys [data error]} %]
+                                   (if error
+                                     (do (js/console.log "BACKEND RETURNED ERROR:" error)
+                                         error)
+                                     data))
+                                body)
+                      (js/Error. (str "Error, received status code: " status)))]))))
+
+;; ---------------------------------------------
+
+(rf/register-handler
+ :todo/remote-save-request
+ (fn [db _]
+   (backend [{:service-id :todo/save
+              :todos      (-> db :todos (vals))}]
+            :todo/remove-save-response)
+   db))
+
+
+(rf/register-handler
+ :todo/remove-save-response
+ (fn [db [_ response]]
+   db))
+
 
 
 (rf/reg-event-db
-  :app/init
-  (fn [db event]
-    {:message "Hello World"
-     :todos {1  {:id 1 :position 1 :label "Clean up living room" :done? false}
-             2  {:id 2 :position 2 :label "Relax" :done? false}}}))
+ :app/init
+ (fn [db event]
+   {:message "Hello World"
+    :todos {1  {:id 1 :position 1 :label "Clean up living room" :done? false}
+            2  {:id 2 :position 2 :label "Relax" :done? false}}}))
 
 
-(rf/reg-sub
- :app/message
- (fn [db query]
-   (:message db)))
-
-
-(rf/reg-sub
- :app/todos
- (fn [db _]
-   (->> db :todos (vals) (sort-by :position))))
 
 (rf/reg-event-db
  :app/set
  (fn [db [_ path value]]
    (js/console.log "Setting" (pr-str path) "to" (pr-str value))
    (assoc-in db path value)))
-
 
 (rf/reg-event-db
  :todo/new
@@ -80,6 +125,12 @@
     label]])
 
 
+(rf/reg-sub
+ :app/todos
+ (fn [db _]
+   (->> db :todos (vals) (sort-by :position))))
+
+
 (defn todos
   []
   (let [!todos (rf/subscribe [:app/todos])]
@@ -103,10 +154,8 @@
 
 (defn app
   []
-  (let [!message (rf/subscribe [:app/message])]
-    (fn []
-      [:div
-       [todos]])))
+  [:div
+   [todos]])
 
 
 (defn mount!
