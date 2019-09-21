@@ -12,6 +12,7 @@
   (log/debug "Received service request" (:body request))
   (let [responses
         (->> request
+             :body
              (mapv (partial service context)))]
     {:status 200
      :body responses}))

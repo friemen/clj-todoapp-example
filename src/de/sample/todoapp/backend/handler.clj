@@ -34,7 +34,7 @@
        (GET "/" []
             (index))
        (POST "/" request
-             (ui/invoke-services! {} (:body request)))
+             (ui/invoke-services! {} request))
        (route/not-found "Page not found"))
       (wrap-transit)))
 
