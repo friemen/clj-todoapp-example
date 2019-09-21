@@ -7,7 +7,8 @@
    [hiccup.page :as hp]
    [ring.util.response :as response]
    [ring.middleware.transit :refer [wrap-transit-response wrap-transit-body]]
-   ))
+   [de.sample.todoapp.backend.services.ui :as ui]
+   [de.sample.todoapp.backend.services.ui.todos]))
 
 
 (defn- index
@@ -27,20 +28,13 @@
       (wrap-transit-body)))
 
 
-(defn- invoke-services!
-  [request]
-  (log/debug (:body request))
-  {:status 200
-   :body ["ok"]})
-
-
 (defn- ui-routes
   []
   (-> (cp/routes
        (GET "/" []
             (index))
        (POST "/" request
-             (invoke-services! request))
+             (ui/invoke-services! {} (:body request)))
        (route/not-found "Page not found"))
       (wrap-transit)))
 

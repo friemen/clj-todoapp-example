@@ -31,7 +31,8 @@
 
           {:keys [status body] :as response}
           (<! (http/post "/ui" request))]
-
+      ;; beware: logging responses is too expensive for production use
+      (js/console.log "Received response" (pr-str response))
       (rf/dispatch [handler-id
                     (case status
                       200 (mapv #(let [{:keys [data error]} %]
@@ -47,25 +48,40 @@
 (rf/register-handler
  :todo/remote-save-request
  (fn [db _]
-   (backend [{:service-id :todo/save
+   (backend [{:service-id :todos/save
               :todos      (-> db :todos (vals))}]
-            :todo/remove-save-response)
+            :todo/remote-save-response)
    db))
 
 
 (rf/register-handler
- :todo/remove-save-response
+ :todo/remote-save-response
  (fn [db [_ response]]
    db))
+
+
+(rf/register-handler
+ :todo/remote-load-request
+ (fn [db _]
+   (backend [{:service-id :todos/load}]
+            :todo/remote-load-response)
+   db))
+
+
+(rf/register-handler
+ :todo/remote-load-response
+ (fn [db [_ [todos]]]
+   (js/console.log "Received todos" (pr-str todos))
+   (assoc db :todos (->> todos
+                         (map (juxt :id identity))
+                         (into {})))))
 
 
 
 (rf/reg-event-db
  :app/init
  (fn [db event]
-   {:message "Hello World"
-    :todos {1  {:id 1 :position 1 :label "Clean up living room" :done? false}
-            2  {:id 2 :position 2 :label "Relax" :done? false}}}))
+   {}))
 
 
 
@@ -162,6 +178,7 @@
   []
   (js/console.log "Hello World")
   (rf/dispatch-sync [:app/init])
+  (rf/dispatch [:todo/remote-load-request])
   (reagent/render [app]
                   (js/document.getElementById "app")))
 
