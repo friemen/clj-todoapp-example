@@ -4,11 +4,12 @@
    [de.sample.todoapp.backend.handler :as handler]))
 
 
-(defrecord App [handler]
+(defrecord App [db
+                handler]
   c/Lifecycle
   (start [component]
     (println ";; Starting App")
-    (assoc component :handler (handler/new-handler)))
+    (assoc component :handler (handler/new-handler db)))
 
   (stop [component]
     (println ";; Stopping App")

@@ -1,5 +1,6 @@
 (ns de.sample.todoapp.backend.services.ui
-  (:require [taoensso.timbre :as log]))
+  (:require
+   [taoensso.timbre :as log]))
 
 
 (defmulti service

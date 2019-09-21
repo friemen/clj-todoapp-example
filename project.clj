@@ -28,10 +28,10 @@
    [ring/ring-anti-forgery "1.3.0"]
    [ring-transit "0.1.6"]
 
-
    ;; DB related
    [com.h2database/h2 "1.4.199"]
    [org.clojure/java.jdbc "0.7.10"]
+   [honeysql "0.9.8"]
    [com.mchange/c3p0 "0.9.5.4"]]
 
   :plugins

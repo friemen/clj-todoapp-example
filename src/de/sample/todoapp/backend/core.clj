@@ -24,7 +24,7 @@
    :app
    (c/using
     (app-impl/new-app)
-    [])
+    [:db])
 
    :server
    (c/using

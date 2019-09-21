@@ -8,35 +8,15 @@
    [ring.util.response :as response]
    [ring.middleware.transit :refer [wrap-transit-response wrap-transit-body]]
    [de.sample.todoapp.backend.services.ui :as ui]
-   [de.sample.todoapp.backend.services.ui.todos]))
+   [de.sample.todoapp.backend.services.ui.todos]
+   [clojure.java.jdbc :as jdbc]))
 
 
-(defn- index
-  []
-  (hp/html5 [:head
-             [:link {:href "css/stylesheet.css" :rel "stylesheet" :type "text/css"}]]
-            [:body
-             [:div#app
-              "Loading..."]
-             [:script {:type "text/javascript"
-                       :src "js/main.js"}]]))
-
-(defn- wrap-transit
-  [handler]
-  (-> handler
-      (wrap-transit-response)
-      (wrap-transit-body)))
-
-
-(defn- ui-routes
-  []
-  (-> (cp/routes
-       (GET "/" []
-            (index))
-       (POST "/" request
-             (ui/invoke-services! {} request))
-       (route/not-found "Page not found"))
-      (wrap-transit)))
+(defn- wrap-transaction
+  [handler db]
+  (fn [request]
+    (jdbc/with-db-transaction [tx db]
+      (handler (assoc-in request [::ctx :tx] tx)))))
 
 
 (defn- exception->str
@@ -63,13 +43,46 @@
             :body (str "An error has occurred:\n" (exception->str ex))}))))
 
 
+(defn- wrap-transit
+  [handler]
+  (-> handler
+      (wrap-transit-response)
+      (wrap-transit-body)))
+
+
+
+;; ----------------------------------------------------------
+
+(defn- index
+  []
+  (hp/html5 [:head
+             [:link {:href "css/stylesheet.css" :rel "stylesheet" :type "text/css"}]]
+            [:body
+             [:div#app
+              "Loading..."]
+             [:script {:type "text/javascript"
+                       :src "js/main.js"}]]))
+
+(defn- ui-routes
+  [db]
+  (-> (cp/routes
+       (GET "/" []
+            (index))
+       (POST "/" request
+             (ui/invoke-services! (::ctx request) request))
+       (route/not-found "Page not found"))
+      (wrap-transaction db)
+      (wrap-transit)))
+
+
+
 
 (defn new-handler
-  []
+  [db]
   (-> (cp/routes
        (route/resources "")
        (cp/context "/ui" []
-                   (ui-routes))
+                   (ui-routes db))
        (GET "/" []
             (response/redirect "/ui")))
       (wrap-exception)))

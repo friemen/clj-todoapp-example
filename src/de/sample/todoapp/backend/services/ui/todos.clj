@@ -1,14 +1,22 @@
 (ns de.sample.todoapp.backend.services.ui.todos
   (:require
-   [de.sample.todoapp.backend.services.ui :refer [service]]))
+   [de.sample.todoapp.backend.services.ui :refer [service]]
+   [de.sample.todoapp.backend.database.queries :as queries]
+   [de.sample.todoapp.backend.database.mutations :as mutations]
+   [clojure.java.jdbc :as jdbc]))
 
 
 (defmethod service :todos/load
-  [context request]
-  {:data [{:id 1 :position 1 :label "Clean up living room" :done? false}
-           {:id 2 :position 2 :label "Relax" :done? false}]})
+  [{:keys [tx] :as ctx} _]
+  {:data (queries/all-todos tx)})
 
 
 (defmethod service :todos/save
-  [context request]
-  )
+  [{:keys [tx] :as ctx} {:keys [todos]}]
+  (let [delete (->> todos (filter :delete?) (map :id))
+        upsert (->> todos (remove :delete?))]
+    (doseq [id delete]
+      (jdbc/delete! tx :todo ["id=?" id]))
+    (doseq [todo upsert]
+      (mutations/upsert! tx :todo todo))
+    {:data (queries/all-todos tx)}))

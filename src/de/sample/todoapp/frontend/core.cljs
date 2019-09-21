@@ -12,13 +12,7 @@
  (fn [db _]
    (remote/backend [{:service-id :todos/save
                      :todos      (-> db :todos (vals))}]
-                   :todo/remote-save-response)
-   db))
-
-
-(rf/reg-event-db
- :todo/remote-save-response
- (fn [db [_ response]]
+                   :todo/remote-load-response)
    db))
 
 
@@ -53,6 +47,7 @@
    (js/console.log "Setting" (pr-str path) "to" (pr-str value))
    (assoc-in db path value)))
 
+
 (rf/reg-event-db
  :todo/new
  (fn [db [_]]
@@ -63,13 +58,28 @@
                {:id       temp-id
                 :position position
                 :label    ""
-                :done?    false}))))
+                :done     false}))))
 
 (rf/reg-event-db
  :todo/delete
  (fn [db [_ id]]
    (if (js/window.confirm (str "Delete item " id "?"))
-     (update db :todos dissoc id)
+     (let [todos
+           (-> db :todos (assoc-in [id :delete?] true))
+
+           position-id-pairs
+           (->> todos
+                (vals)
+                (remove :delete?)
+                (map :id)
+                (map-indexed vector))
+
+           todos
+           (reduce (fn [todos [position id]]
+                     (assoc-in todos [id :position] position))
+                   todos
+                   position-id-pairs)]
+       (assoc db :todos todos))
      db)))
 
 
@@ -106,7 +116,9 @@
 (rf/reg-sub
  :app/todos
  (fn [db _]
-   (->> db :todos (vals) (sort-by :position))))
+   (->> db :todos (vals)
+        (remove :delete?)
+        (sort-by :position))))
 
 
 (defn todos
@@ -114,21 +126,25 @@
   (let [!todos (rf/subscribe [:app/todos])]
     [:div.todos
      [:legend "My todo items"]
-     [:ul (for [{:keys [id label done?]} @!todos]
+     [:ul (for [{:keys [id position label done]} @!todos]
             [:li.todo
              {:key id}
-             [:span.id id]
-             [checkbox {:path [:todos id :done?]}
-              done?]
+             [:span.position (inc position) "."]
+             [checkbox {:path [:todos id :done]}
+              done]
              [textfield {:path [:todos id :label]}
               label]
              [:span.delete
               {:on-click (fn [e]
                            (rf/dispatch [:todo/delete id]))}
-              "x"]])]
+              "x"]
+             [:span.id "Id " id]])]
      [button {:id :add
               :label "+ Add item"
-              :event [:todo/new]}]]))
+              :event [:todo/new]}]
+     [button {:id :save
+              :label "Save"
+              :event [:todo/remote-save-request]}]]))
 
 (defn app
   []

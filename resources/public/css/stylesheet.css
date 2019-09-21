@@ -25,15 +25,17 @@ body {
 }
 .todos .todo .id {
   display: inline-block;
+  float: right;
   font-size: 60%;
   font-weight: bold;
   padding: 0.5rem;
-  width: 0.5rem;
+  width: 2rem;
   height: 0.5rem;
-  margin-right: 1rem;
   text-align: center;
-  border-radius: 50%;
-  background-color: #aaf;
+}
+.todos .todo .position {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 .todos .todo .delete {
   cursor: default;
