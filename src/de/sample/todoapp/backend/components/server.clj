@@ -1,19 +1,20 @@
 (ns de.sample.todoapp.backend.components.server
+  "An HTTP Server component based on http-kit."
   (:require
    [com.stuartsierra.component :as c]
    [org.httpkit.server :as httpkit-server]))
 
 
-(defrecord Server [options
-                   app
-                   stop-fn]
+(defrecord Server [options     ;; options
+                   app         ;; deps
+                   stop-fn]    ;; managed state
   c/Lifecycle
   (start [component]
-    (println ";; Starting HttpKit on port" (:port options))
+    (println ";; Starting http-kit on port" (:port options))
     (assoc component :stop-fn (httpkit-server/run-server (:handler app) options)))
 
   (stop [component]
-    (println ";; Shutting HttpKit down")
+    (println ";; Shutting http-kit down")
     (when stop-fn
       (stop-fn))
     (assoc component :stop-fn nil)))

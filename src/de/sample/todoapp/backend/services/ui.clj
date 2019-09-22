@@ -1,4 +1,5 @@
 (ns de.sample.todoapp.backend.services.ui
+  "UI devoted services multimethod."
   (:require
    [taoensso.timbre :as log]))
 

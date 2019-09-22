@@ -1,25 +1,59 @@
 # todoapp
 
-A sample application
+An architectural prototype demonstrating a full-stack single-page
+application (SPA) built on top of React with a SQL-DB based backend.
+
+Aspects shown here include:
+
+* Usage of re-frame, Reagent
+
+* Client-side routing
+
+* A JSON API service layer
+
+* A Transit based UI service layer
+
+* Transactional DB access with a connection pool
+
+* Usage of a central configuration file
+
 
 ## TODOs
 
-Add sass watcher.
+* Add frontend routing and another page as example.
 
-Style the pages.
+* Move widgets to their own ns
 
-Add Honey SQL DB queries.
+* Add configuration loading from a file
 
-Add standard routes and middlewares (tx, exception, context, friend).
+* Add standard routes and middlewares (tx, exception, context, friend).
 
-Add UI Service infrastructure.
-
-Add API Service infrastructure.
+* Add API Service infrastructure.
 
 
 ## Usage
 
-FIXME
+To work interactively on your .sass stylesheet open a shell, cd into
+your project folder and start
+
+`sass --watch src/sass/stylesheet.sass resources/public/css`
+
+To start a REPL use `lein repl` in some other shell.
+
+After connecting to your REPL use `(user/system-*)` commands to
+start/stop/restart the backend.
+
+Use `(user/start-figwheel!)` to start Figwheel (an interactive,
+incremental Cljs compiler). Figwheel will also hotload your CSS into
+the browser.
+
+Use `(user/cljs-repl)` to connect your REPL to the browser.
+
+
+To interact with the database you can use expressions like
+
+`(jdbc/query (:db user/system) ["select * from todo"])`.
+
 
 ## License
 

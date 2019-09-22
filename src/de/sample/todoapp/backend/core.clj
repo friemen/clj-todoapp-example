@@ -23,7 +23,7 @@
 
    :app
    (c/using
-    (app-impl/new-app)
+    (app-impl/new-app (:app config))
     [:db])
 
    :server

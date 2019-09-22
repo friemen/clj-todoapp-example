@@ -1,4 +1,5 @@
 (ns de.sample.todoapp.backend.database.queries
+  "Collection of SQL queries."
   (:require
    [clojure.java.jdbc :as jdbc]
    [honeysql.helpers :as h]

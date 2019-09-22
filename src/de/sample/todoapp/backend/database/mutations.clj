@@ -1,4 +1,5 @@
 (ns de.sample.todoapp.backend.database.mutations
+  "Generic tools to mutate DB state."
   (:require [clojure.java.jdbc :as jdbc]
             [taoensso.timbre :as log]))
 

@@ -1,17 +1,9 @@
 (ns de.sample.todoapp.backend.components.db
+  "An in-process H2 database component."
   (:require
    [com.stuartsierra.component :as c])
   (:import
    [org.h2.tools Server]))
-
-#_(def db-file "~/webapp.db")
-#_(def db-spec {:classname "org.h2.Driver"
-              :subprotocol "h2"
-              :subname db-file
-              :user "sa"
-              :password ""
-              :naming {:keys clojure.string/lower-case}})
-
 
 
 (defrecord Database [options

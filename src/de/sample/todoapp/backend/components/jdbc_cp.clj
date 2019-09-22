@@ -1,4 +1,5 @@
 (ns de.sample.todoapp.backend.components.jdbc-cp
+  "A JDBC connection pooling component based on C3P0."
   (:require
    [com.stuartsierra.component :as c])
   (:import

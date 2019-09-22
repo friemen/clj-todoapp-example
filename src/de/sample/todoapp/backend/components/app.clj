@@ -1,11 +1,13 @@
 (ns de.sample.todoapp.backend.components.app
+  "The application component."
   (:require
    [com.stuartsierra.component :as c]
    [de.sample.todoapp.backend.handler :as handler]))
 
 
-(defrecord App [db
-                handler]
+(defrecord App [options       ;; options
+                db            ;; deps
+                handler]      ;; managed state
   c/Lifecycle
   (start [component]
     (println ";; Starting App")
@@ -17,5 +19,5 @@
 
 
 (defn new-app
-  []
-  (map->App {}))
+  [options]
+  (map->App {:options options}))
