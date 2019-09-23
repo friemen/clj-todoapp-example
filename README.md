@@ -22,8 +22,6 @@ Aspects shown here include:
 
 * Add frontend routing and another page as example.
 
-* Move widgets to their own ns
-
 * Add configuration loading from a file
 
 * Add standard routes and middlewares (tx, exception, context, friend).
