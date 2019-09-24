@@ -31,6 +31,18 @@ Aspects shown here include:
 
 ## Usage
 
+After starting the system you can access the in-process H2 DB
+via http://localhost:8082 with user `sa` and empty password.
+
+The schema is
+
+```
+create table todo (id int primary key auto_increment,
+                   position int,
+				   label varchar(250),
+				   done bool);
+```
+
 To work interactively on your .sass stylesheet open a shell, cd into
 your project folder and start
 

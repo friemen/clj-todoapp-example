@@ -2,8 +2,12 @@
   (:require
    [reagent.core :as reagent]
    [re-frame.core :as rf]
-   [de.sample.todoapp.frontend.views.todo :as todo]
-   [de.sample.todoapp.frontend.remote :as remote]))
+
+   [de.sample.todoapp.frontend.remote :as remote]
+   [de.sample.todoapp.frontend.routing :as routing]
+
+   ;; views
+   [de.sample.todoapp.frontend.views.todo :as todo]))
 
 
 
@@ -20,6 +24,7 @@
    (assoc-in db path value)))
 
 
+
 (defn app
   []
   [:div
@@ -30,6 +35,7 @@
   []
   (js/console.log "Starting frontend")
   (rf/dispatch-sync [:app/init])
+  (routing/init!)
   (rf/dispatch [:todo/remote-load-request])
   (reagent/render [app]
                   (js/document.getElementById "app")))

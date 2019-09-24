@@ -14,12 +14,13 @@
    [org.clojure/clojurescript  "1.10.520"]
    [re-frame "0.10.9"]
    [cljs-http "0.1.46"]
+   [bidi "2.1.6"]
 
    ;; Backend general
    [com.stuartsierra/component "0.4.0"]
    [com.taoensso/timbre "4.10.0"]
 
-   ;; web related
+   ;; Backend http related
    [http-kit "2.3.0"]
    [hiccup "1.0.5"]
    [compojure "1.6.1"]
