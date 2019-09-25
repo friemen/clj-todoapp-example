@@ -40,14 +40,18 @@
   (refresh :after 'user/system-go!))
 
 
+(defn reset-db!
+  []
+  (jdbc/with-db-transaction [tx (:db system)]
+    (doseq [stmt ["drop table todo if exists"
+                  "create table todo (id int primary key auto_increment, position int, label varchar(250), done boolean)"]]
+      (jdbc/execute! tx [stmt]))))
+
+
 (comment
-  ;; Test DB access
-  (require '[clojure.java.jdbc :as jdbc])
 
+  ;; insert one todo into DB
   (jdbc/with-db-transaction [tx (:db system)]
-    (jdbc/execute! tx ["create table todos (label varchar(200), done boolean)"]))
-
-  (jdbc/with-db-transaction [tx (:db system)]
-    (jdbc/execute! tx ["insert into todos (label,done) values ('Putzen',false)"]))
+    (jdbc/execute! tx ["insert into todo (position, label, done) values (0, 'Clean kitchen',false)"]))
 
   ,,,)

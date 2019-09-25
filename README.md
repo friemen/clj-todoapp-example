@@ -15,21 +15,26 @@ Aspects shown here include:
 
 * Transactional DB access with a connection pool
 
-* Usage of a central configuration file
+* Use a central configuration file
+
+* Interactive programming with Figwheel
 
 
 ## TODOs
 
-* Add frontend routing and another page as example.
+* Add another page as example.
 
-* Add a main function
-
-* Add standard routes and middlewares (tx, exception, context, friend).
+* Add authentication based on friend.
 
 * Add API Service infrastructure.
 
 
 ## Usage
+
+To start a REPL use `lein repl` in some shell.
+
+After connecting to your REPL use `(user/system-*)` commands to
+start/stop/restart the backend.
 
 After starting the system you can access the in-process H2 DB
 via http://localhost:8082 with user `sa` and empty password.
@@ -43,15 +48,16 @@ create table todo (id int primary key auto_increment,
 				   done bool);
 ```
 
-To work interactively on your .sass stylesheet open a shell, cd into
-your project folder and start
 
-`sass --watch src/sass/stylesheet.sass resources/public/css`
+The `user` namespace contains a `reset-db!` function which drops all
+tables and re-creates them.
 
-To start a REPL use `lein repl` in some other shell.
+To interact freely with the database you can use expressions like
 
-After connecting to your REPL use `(user/system-*)` commands to
-start/stop/restart the backend.
+`(jdbc/query (:db user/system) ["select * from todo"])`.
+
+
+
 
 Use `(user/start-figwheel!)` to start Figwheel (an interactive,
 incremental Cljs compiler). Figwheel will also hotload your CSS into
@@ -59,10 +65,18 @@ the browser.
 
 Use `(user/cljs-repl)` to connect your REPL to the browser.
 
+To work interactively on your `.sass` stylesheet open a shell, cd into
+your project folder and start
 
-To interact with the database you can use expressions like
+`sass --watch src/sass/stylesheet.sass resources/public/css`
 
-`(jdbc/query (:db user/system) ["select * from todo"])`.
+
+
+To build a shippable uberjar type `lein uberjar`.
+
+
+(After an uberjar build it's advisable to clean target and
+resources/public/js folders.)
 
 
 ## License
