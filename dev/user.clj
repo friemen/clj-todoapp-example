@@ -11,14 +11,12 @@
 (defonce system
   nil)
 
-(def config
-  (config/load))
-
 
 (defn system-init!
   []
-  (alter-var-root #'system
-                  (constantly (core/new-system config))))
+  (let [config (config/load)]
+    (alter-var-root #'system
+                    (constantly (core/new-system config)))))
 
 (defn system-start!
   []
