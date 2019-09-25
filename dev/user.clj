@@ -5,18 +5,15 @@
             [com.stuartsierra.component :as c]
             [figwheel-sidecar.repl-api :refer :all]
 
+            [de.sample.todoapp.backend.config :as config]
             [de.sample.todoapp.backend.core :as core]))
 
 (defonce system
   nil)
 
-;; TODO load config from file
 (def config
-  {:server        {:port 1337}
-   :db-connection {:classname "org.h2.Driver"
-                   :url       "jdbc:h2:tcp://localhost/~/todos"
-                   :user      "sa"
-                   :password  ""}})
+  (config/load))
+
 
 (defn system-init!
   []

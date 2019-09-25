@@ -22,7 +22,7 @@ Aspects shown here include:
 
 * Add frontend routing and another page as example.
 
-* Add configuration loading from a file
+* Add a main function
 
 * Add standard routes and middlewares (tx, exception, context, friend).
 
