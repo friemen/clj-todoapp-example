@@ -19,7 +19,7 @@
    :db
    (c/using
     (cp-impl/new-connection-pool (:db-connection config))
-    [])
+    [:db-server])
 
    :app
    (c/using

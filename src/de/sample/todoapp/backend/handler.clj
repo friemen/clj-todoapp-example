@@ -1,6 +1,7 @@
 (ns de.sample.todoapp.backend.handler
   (:require
    [clojure.string :as str]
+   [clojure.java.jdbc :as jdbc]
    [taoensso.timbre :as log]
    [compojure.core :as cp :refer [GET POST]]
    [compojure.route :as route]
@@ -8,9 +9,10 @@
    [ring.util.response :as response]
    [ring.middleware.transit :refer [wrap-transit-response wrap-transit-body]]
    [de.sample.todoapp.backend.services.ui :as ui]
-   [de.sample.todoapp.backend.services.ui.todos]
-   [clojure.java.jdbc :as jdbc]))
+   [de.sample.todoapp.backend.services.ui.todos]))
 
+;; ---------------------------------------------------------------
+;; TODO move this to handler.middlewares ns
 
 (defn- wrap-transaction
   [handler db]
@@ -52,11 +54,13 @@
 
 
 ;; ----------------------------------------------------------
+;; TODO move this to handler.ui ns
 
 (defn- index
   []
   (hp/html5 [:head
-             [:link {:href "css/stylesheet.css" :rel "stylesheet" :type "text/css"}]]
+             [:link {:href "css/stylesheet.css" :rel "stylesheet" :type "text/css"}]
+             [:title "Todo App"]]
             [:body
              [:div#app
               "Loading..."]
@@ -74,8 +78,7 @@
       (wrap-transaction db)
       (wrap-transit)))
 
-
-
+;; ----------------------------------------------------------
 
 (defn new-handler
   [db]

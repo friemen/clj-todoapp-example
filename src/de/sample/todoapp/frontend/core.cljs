@@ -10,7 +10,6 @@
    [de.sample.todoapp.frontend.views.todo :as todo]))
 
 
-
 (rf/reg-event-db
  :app/init
  (fn [db event]
@@ -22,7 +21,6 @@
  (fn [db [_ path value]]
    (js/console.log "Setting" (pr-str path) "to" (pr-str value))
    (assoc-in db path value)))
-
 
 
 (defn app

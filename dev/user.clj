@@ -4,6 +4,7 @@
 
             [com.stuartsierra.component :as c]
             [figwheel-sidecar.repl-api :refer :all]
+            [taoensso.timbre :as log]
 
             [de.sample.todoapp.backend.config :as config]
             [de.sample.todoapp.backend.core :as core]))
@@ -15,6 +16,7 @@
 (defn system-init!
   []
   (let [config (config/load)]
+    (log/merge-config! (:logging config))
     (alter-var-root #'system
                     (constantly (core/new-system config)))))
 
