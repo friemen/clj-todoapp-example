@@ -5,8 +5,8 @@
 
 (rf/reg-sub
  :todo/items
- ;;:<- [:app/formstate]
- (fn [db _]
-   (->> db :app/formstate :todos (vals)
+ :<- [:app/formstate]
+ (fn [formstate _]
+   (->> formstate :todos (vals)
         (remove :delete?)
         (sort-by :position))))
