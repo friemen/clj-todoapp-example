@@ -7,7 +7,8 @@
 
 (defn view
   []
-  (let [!todos (rf/subscribe [:todo/items])]
+  (let [_      (rf/dispatch [:todo/remote-load-request])
+        !todos (rf/subscribe [:todo/items])]
     [:div.todos
      [:legend "My todo items"]
      [:ul (for [{:keys [id position label done]} @!todos]
@@ -23,9 +24,9 @@
                            (rf/dispatch [:todo/delete id]))}
               "x"]
              [:span.id "Id " id]])]
-     [w/button {:id :add
-              :label "+ Add item"
-              :event [:todo/new]}]
-     [w/button {:id :save
-              :label "Save"
-              :event [:todo/remote-save-request]}]]))
+     [w/button {:id    :add
+                :label "+ Add item"
+                :event [:todo/new]}]
+     [w/button {:id    :save
+                :label "Save"
+                :event [:todo/remote-save-request]}]]))

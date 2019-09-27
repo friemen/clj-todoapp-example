@@ -31,12 +31,15 @@
 
 (defn mount!
   []
-  (js/console.log "Starting frontend")
-  (rf/dispatch-sync [:app/init])
   (routing/init!)
-  (rf/dispatch [:todo/remote-load-request])
   (reagent/render [app]
                   (js/document.getElementById "app")))
 
 
-(mount!)
+(defn start!
+  []
+  (js/console.log "Starting frontend")
+  (rf/dispatch-sync [:app/init])
+  (mount!))
+
+(start!)

@@ -40,38 +40,41 @@
    [lein-figwheel "0.5.19"]]
 
   :profiles
-  {:dev {:source-paths
-         ["dev"]
-         :dependencies
-         [[org.clojure/tools.namespace "0.3.1"]
-          [cider/piggieback "0.4.1"]
-          [figwheel-sidecar "0.5.19"
-           :exclusions [org.clojure/tools.nrepl]]]
-         :repl-options
-         {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
-         :cljsbuild
-         {:builds {:dev
-                   {:source-paths ["src"]
-                    :figwheel true
-                    :compiler {:main "de.sample.todoapp.frontend.core"
-                               :asset-path "js/out"
-                               :output-to "resources/public/js/main.js"
-                               :output-dir "resources/public/js/out"
-                               :source-map true}}}}}
-   :uberjar {:aot :all
+  {:dev     {:source-paths
+             ["dev"]
+             :dependencies
+             [[org.clojure/tools.namespace "0.3.1"]
+              [cider/piggieback "0.4.1"]
+              [figwheel-sidecar "0.5.19"
+               :exclusions [org.clojure/tools.nrepl]]
+              [re-frisk "0.5.3"]]
+             :repl-options
+             {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
+             :cljsbuild
+             {:builds {:dev
+                       {:source-paths ["src"]
+                        :figwheel     true
+                        :compiler     {:preloads        [re-frisk.preload]
+                                       :main            "de.sample.todoapp.frontend.core"
+                                       :asset-path      "js/out"
+                                       :output-to       "resources/public/js/main.js"
+                                       :output-dir      "resources/public/js/out"
+                                       :source-map      true}}}}}
+   :uberjar {:aot  :all
              :main de.sample.todoapp.backend.main
              :prep-tasks
              ["compile" ["cljsbuild" "once"]]
              :cljsbuild
              {:builds {:main
                        {:source-paths ["src"]
-                        :jar true
-                        :compiler {:output-to "resources/public/js/main.js"
-                                   :optimizations :advanced
-                                   :pretty-print false}}}}}}
+                        :jar          true
+                        :compiler     {:output-to     "resources/public/js/main.js"
+                                       :optimizations :advanced
+                                       :pretty-print  false}}}}}}
 
   :figwheel
-  {:css-dirs ["resources/public/css"]}
+  {:css-dirs
+   ["resources/public/css"]}
 
   :uberjar-name
   "todoapp.jar"
