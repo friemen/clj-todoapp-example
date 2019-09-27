@@ -4,12 +4,13 @@
    [bidi.bidi :as bidi]
    [clojure.string :as str]))
 
-
+;; frontend route definitions in bidi format
 (def routes
   ["/" {""     :default
         "todos" {"" :todos
                  ["/" :id] :todo}}])
 
+;; private
 
 (defn- key-value
   [s]
@@ -27,6 +28,8 @@
            (map key-value)
            (into {})))))
 
+
+;; Public API
 
 (defn parse-from-url
   [url]
@@ -52,15 +55,6 @@
                            (map (fn [[k v]]
                                   (str (bidi/url-encode (name k)) "=" (bidi/url-encode v))))
                            (str/join "&")))))))))
-
-
-(rf/reg-event-db
- :app/route
- (fn [db [_ from-url to-url]]
-   (let [routing {:url to-url
-                  :route (parse-from-url to-url)}]
-     (js/console.log "Route set" (pr-str routing))
-     (assoc db :app/routing routing))))
 
 
 (defn init!

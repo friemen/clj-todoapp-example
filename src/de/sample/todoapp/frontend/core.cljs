@@ -23,10 +23,15 @@
   (mount!))
 
 
+(def seed
+  {:app/routing   {:handler :todo}
+   :app/formstate {}})
+
+
 (defn start!
   []
   (js/console.log "Starting frontend")
-  (rf/dispatch-sync [:app/init])
+  (rf/dispatch-sync [:app/init seed])
   (mount!)
   (routing/goto! {:handler :todos}))
 

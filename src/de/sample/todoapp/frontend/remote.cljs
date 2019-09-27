@@ -30,6 +30,7 @@
           (<! (http/post "/ui" request))]
       ;; beware: logging responses is too expensive for production use
       #_(js/console.log "Received response" (pr-str response))
+      (js/console.log "Received response")
       (rf/dispatch [handler-id
                     (case status
                       200 (mapv #(let [{:keys [data error]} %]

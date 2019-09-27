@@ -25,7 +25,6 @@
 (rf/reg-event-db
  :todo/remote-load-response
  (fn [db [_ [todos]]]
-   (js/console.log "Received todos" (pr-str todos))
    (assoc-in db [:app/formstate :todos]
              (->> todos
                   (map (juxt :id identity))
