@@ -60,7 +60,7 @@
    (let [routing {:url to-url
                   :route (parse-from-url to-url)}]
      (js/console.log "Route set" (pr-str routing))
-     (assoc db :routing routing))))
+     (assoc db :app/routing routing))))
 
 
 (defn init!

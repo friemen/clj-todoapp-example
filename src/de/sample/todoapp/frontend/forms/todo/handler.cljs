@@ -1,4 +1,4 @@
-(ns de.sample.todoapp.frontend.views.todo.handler
+(ns de.sample.todoapp.frontend.forms.todo.handler
   (:require
    [re-frame.core :as rf]
    [de.sample.todoapp.frontend.remote :as remote]))
@@ -9,7 +9,7 @@
  :todo/remote-save-request
  (fn [db _]
    (remote/backend [{:service-id :todos/save
-                     :todos      (-> db :todos (vals))}]
+                     :todos      (-> db :app/formstate :todos (vals))}]
                    :todo/remote-load-response)
    db))
 
@@ -26,18 +26,19 @@
  :todo/remote-load-response
  (fn [db [_ [todos]]]
    (js/console.log "Received todos" (pr-str todos))
-   (assoc db :todos (->> todos
-                         (map (juxt :id identity))
-                         (into {})))))
+   (assoc-in db [:app/formstate :todos]
+             (->> todos
+                  (map (juxt :id identity))
+                  (into {})))))
 
 
 (rf/reg-event-db
  :todo/new
  (fn [db [_]]
-   (let [todos    (->> db :todos (vals))
+   (let [todos    (->> db :app/formstate :todos (vals))
          temp-id  (->> todos (map :id) (remove pos?) (reduce min 0) (dec))
          position (count todos)]
-     (assoc-in db [:todos temp-id]
+     (assoc-in db [:app/formstate :todos temp-id]
                {:id       temp-id
                 :position position
                 :label    ""
@@ -49,7 +50,7 @@
  (fn [db [_ id]]
    (if (js/window.confirm (str "Delete item " id "?"))
      (let [todos
-           (-> db :todos (assoc-in [id :delete?] true))
+           (-> db :app/formstate :todos (assoc-in [id :delete?] true))
 
            position-id-pairs
            (->> todos
@@ -63,5 +64,5 @@
                      (assoc-in todos [id :position] position))
                    todos
                    position-id-pairs)]
-       (assoc db :todos todos))
+       (assoc-in db [:app/formstate :todos] todos))
      db)))

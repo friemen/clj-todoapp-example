@@ -53,13 +53,13 @@
              :cljsbuild
              {:builds {:dev
                        {:source-paths ["src"]
-                        :figwheel     true
-                        :compiler     {:preloads        [re-frisk.preload]
-                                       :main            "de.sample.todoapp.frontend.core"
-                                       :asset-path      "js/out"
-                                       :output-to       "resources/public/js/main.js"
-                                       :output-dir      "resources/public/js/out"
-                                       :source-map      true}}}}}
+                        :figwheel     {:on-jsload "de.sample.todoapp.frontend.core/reload"}
+                        :compiler     {:preloads   [re-frisk.preload]
+                                       :main       "de.sample.todoapp.frontend.core"
+                                       :asset-path "js/out"
+                                       :output-to  "resources/public/js/main.js"
+                                       :output-dir "resources/public/js/out"
+                                       :source-map true}}}}}
    :uberjar {:aot  :all
              :main de.sample.todoapp.backend.main
              :prep-tasks
