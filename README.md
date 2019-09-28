@@ -75,9 +75,14 @@ Use `(user/start-figwheel!)` to start
 [Figwheel](https://github.com/bhauman/lein-figwheel) (an interactive,
 incremental Cljs compiler). Figwheel will also hotload your CSS into
 the browser. It is advisable to use Chrome or Chromium for development
-purposes.
+purposes. Load the page http://localhost:1337/ui
 
-Use `(user/cljs-repl)` to connect your REPL to the browser.
+To connect your REPL to the browser you can use `(user/cljs-repl)`.
+
+To switch the REPL back to the connection to the JVM you can execute
+`:cljs/quit` (yes, enter only the keyword). It's also possible to have
+simultaneously multiple sessions within one REPL connection (like one
+for the JVM and another for the browser), but I rarely need that.
 
 To work interactively on your `.sass` stylesheet open a shell, cd into
 your project folder and start
