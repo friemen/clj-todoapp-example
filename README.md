@@ -9,29 +9,34 @@ Aspects shown here include:
 
 * Client-side routing
 
-* A JSON API service layer
-
 * A Transit based UI service layer
 
 * Transactional DB access with a connection pool
 
-* Use a central configuration file
+* Application configuration, incl. logging
 
 * Interactive programming with Figwheel
 
 
-## TODOs
+## Yet to be added
 
-* Add another page as example.
+* A details page to better demonstrate routing
 
-* Add authentication based on friend.
+* Login page and authentication based on friend
 
-* Add API Service infrastructure.
+* A JSON API service layer
 
 
 ## Usage
 
-To start a REPL use `lein repl` in some shell.
+You'll need [Leiningen](https://leiningen.org) and a Java >=8
+[JDK](https://openjdk.java.net/projects/jdk8/).
+
+Clone this project.
+
+You'll first want to start a REPL. How you do it depends on how you
+prefer to work with Clojure. I'm using Emacs and execute `lein
+repl` in some Linux shell.  Then I connect to it.
 
 After connecting to your REPL use `(user/system-*)` commands to
 start/stop/restart the backend.
@@ -44,19 +49,22 @@ The schema is
 ```
 create table todo (id int primary key auto_increment,
                    position int,
-				   label varchar(250),
-				   done bool);
+                   label varchar(250),
+                   done bool);
 ```
 
 
 The `user` namespace contains a `reset-db!` function which drops all
-tables and re-creates them.
+tables and re-creates them. Execute it to initialise the DB.
 
-To interact freely with the database you can use expressions like
+To interact freely with the database from within the REPL you can use
+expressions like
 
-`(jdbc/query (:db user/system) ["select * from todo"])`.
+`(jdbc/query (:db user/system) ["select * from todo"])`
 
+or
 
+`(jdbc/execute! (:db user/system) ["insert into todo (position, label) values (?,?)" 0 "Repair my bike"])`.
 
 
 Use `(user/start-figwheel!)` to start Figwheel (an interactive,
@@ -70,13 +78,16 @@ your project folder and start
 
 `sass --watch src/sass/stylesheet.sass resources/public/css`
 
+Everytime you save a `.sass` file, SASS will
 
 
 To build a shippable uberjar type `lein uberjar`.
 
 
 (After an uberjar build it's advisable to clean target and
-resources/public/js folders.)
+resources/public/js folders before starting the REPL. In fact, I use
+a bash alias for `remove -rf target resources/public/js && lein repl` to
+make sure I'm always starting clean.)
 
 
 ## License
