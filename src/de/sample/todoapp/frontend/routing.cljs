@@ -50,7 +50,7 @@
            (-> uri
                (subs 1)
                (cond-> (seq query-params)
-                 (str "&"
+                 (str "?"
                       (->> query-params
                            (map (fn [[k v]]
                                   (str (bidi/url-encode (name k)) "=" (bidi/url-encode v))))
