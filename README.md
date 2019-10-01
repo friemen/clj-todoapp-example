@@ -13,6 +13,8 @@ Aspects shown here include:
 
 * Transactional DB access with a connection pool
 
+* Component based system with "reloaded" workflow
+
 * Application configuration, incl. logging
 
 * Interactive programming with Figwheel
