@@ -3,4 +3,6 @@
                  :url       "jdbc:h2:tcp://localhost/~/todos"
                  :user      "sa"
                  :password  ""}
- :logging       {:level :debug}}
+ :logging       {:level :debug}
+ :scheduler     {:schedules
+                 {:reminder-task "15,17,21 22 * * *"}}}

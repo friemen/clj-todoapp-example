@@ -11,7 +11,7 @@
    [org.clojure/core.async "0.4.500"]
 
    ;; Frontend
-   [org.clojure/clojurescript  "1.10.520"]
+   [org.clojure/clojurescript "1.10.520"]
    [re-frame "0.10.9"]
    [cljs-http "0.1.46"]
    [bidi "2.1.6"]
@@ -28,6 +28,10 @@
    [ring/ring-defaults "0.3.2"]
    [ring/ring-anti-forgery "1.3.0"]
    [ring-transit "0.1.6"]
+
+   ;; Scheduler related
+   [jarohen/chime "0.2.2"]
+   [cronstar "1.0.0"]
 
    ;; DB related
    [com.h2database/h2 "1.4.199"]

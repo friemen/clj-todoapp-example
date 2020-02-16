@@ -15,6 +15,8 @@ Aspects shown here include:
 
 * Component based system with "reloaded" workflow
 
+* A custom built scheduler allowing for cron-like job control
+
 * Application configuration, incl. logging
 
 * Interactive programming with Figwheel

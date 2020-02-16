@@ -5,9 +5,9 @@
    [de.sample.todoapp.backend.handler :as handler]))
 
 
-(defrecord App [options       ;; options
-                db            ;; deps
-                handler]      ;; managed state
+(defrecord App [options              ;; options
+                db scheduler         ;; deps
+                handler]             ;; managed state
   c/Lifecycle
   (start [component]
     (println ";; Starting App")

@@ -22,7 +22,12 @@
 
 (defn system-start!
   []
-  (alter-var-root #'system c/start)
+  (try
+    (alter-var-root #'system c/start)
+    (catch Exception ex
+      (log/fatal ex)
+      (when-let [system (-> ex ex-data :system)]
+        (c/stop system))))
   :started)
 
 (defn system-stop!

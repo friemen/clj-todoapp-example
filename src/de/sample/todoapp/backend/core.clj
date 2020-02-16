@@ -5,7 +5,9 @@
     [app :as app-impl]
     [db :as db-impl]
     [jdbc-cp :as cp-impl]
-    [server :as server-impl]]))
+    [server :as server-impl]
+    [scheduler :as scheduler-impl]]
+   [de.sample.todoapp.backend.tasks.reminder :as reminder]))
 
 
 (defn new-system
@@ -24,9 +26,23 @@
    :app
    (c/using
     (app-impl/new-app (:app config))
-    [:db])
+    [:db :scheduler])
+
+   :scheduler
+   (c/using
+    (scheduler-impl/new-scheduler (:scheduler config))
+    [:reminder-task])
 
    :server
    (c/using
     (server-impl/new-server (:server config))
-    [:app])))
+    [:app])
+
+   ;; tasks
+
+   :reminder-task
+   (c/using
+    (reminder/map->ReminderTask {})
+    [:db])
+
+   ))
