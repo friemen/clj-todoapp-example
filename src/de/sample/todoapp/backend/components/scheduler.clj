@@ -37,7 +37,7 @@
         times
         (try (cron/times expr)
              (catch Exception ex
-               (log/warn "Deactived task caused by failure to parse cron expression" task-key)
+               (log/warn "Failure to parse cron expression deactivated task" task-key)
                nil))]
     (if times
       [task-key (assoc task
